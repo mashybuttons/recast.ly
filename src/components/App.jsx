@@ -3,7 +3,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       firstVideo: exampleVideoData[0],
-      videoList: exampleVideoData
+      videoList: exampleVideoData,
     };
   }
 
@@ -15,39 +15,41 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    this.props.searchYouTube({key: window.YOUTUBE_API_KEY}, videos => {
-      console.log('test');
-      console.log(videos);
+    this.props.searchYouTube({key: window.YOUTUBE_API_KEY}, function(videos) {
+      // console.log('test');
+      // console.log(videos);
       this.setState({
         firstVideo: videos[0],
         videoList: videos
       });
-    });    
+    }.bind(this));    
   }
   debouncedSearchVideo(query) {
     var timeout;
-    var wait = 400;
+    var wait = 500;
     var func = this.searchVideo;
-    var self = this;
-    var later = function() {
+    var later = () => {
       timeout = null;
-      if(query) {
-        func.call(self, query);
+      if (query) {
+        func.call(this, query);
       }
-    }
+    };
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
   }
   searchVideo(query) {
-    this.props.searchYouTube({q: query.target.value, max: 10, key: window.YOUTUBE_API_KEY}, videos => {
-      self.setState({
-        currentVideo: videos[0],
-        listOfVideos: videos
+    console.log(query);
+    this.props.searchYouTube({query: query, max: 10, key: window.YOUTUBE_API_KEY}, function(videos) {
+      console.log(videos[0]);
+      this.setState({
+        firstVideo: videos[0],
+        videoList: videos,
       });
-    });
+    }.bind(this));
   }
 
   render() {
+
     return (
       <div>
         <Nav searchFunc={this.debouncedSearchVideo.bind(this)}/>
