@@ -15,12 +15,10 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    console.log('got called');
-    searchYouTube({key: window.YOUTUBE_API_KEY, query: 'cats', max: 10 }, videos => {
+    this.props.searchYouTube({key: window.YOUTUBE_API_KEY}, videos => {
+      console.log('test');
       console.log(videos);
-      console.log(this.setState);
       this.setState({
-
         firstVideo: videos[0],
         videoList: videos
       });
