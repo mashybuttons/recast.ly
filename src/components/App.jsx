@@ -15,30 +15,30 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    this.props.searchYouTube({key: window.YOUTUBE_API_KEY}, function(videos) {
-      // console.log('test');
-      // console.log(videos);
-      this.setState({
-        firstVideo: videos[0],
-        videoList: videos
-      });
-    }.bind(this));    
+    this.searchVideo();
+    // this.props.searchYouTube({key: window.YOUTUBE_API_KEY}, videos => {
+    //   this.setState({
+    //     firstVideo: videos[0],
+    //     videoList: videos
+    //   });
+    // });    
   }
-  debouncedSearchVideo(query) {
-    var timeout;
-    var wait = 500;
-    var func = this.searchVideo;
-    var later = () => {
-      timeout = null;
-      if (query) {
-        func.call(this, query);
-      }
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  }
+  // debouncedSearchVideo(query) {
+
+  //   var timeout;
+  //   var wait = 500;
+  //   var func = this.searchVideo;
+  //   var later = () => {
+  //     timeout = null;
+  //     if (query) {
+  //       func.call(this, query);
+  //     }
+  //   };
+  //   clearTimeout(timeout);
+  //   timeout = setTimeout(later, wait);
+  // }
+
   searchVideo(query) {
-    console.log(query);
     this.props.searchYouTube({query: query, max: 10, key: window.YOUTUBE_API_KEY}, function(videos) {
       console.log(videos[0]);
       this.setState({
@@ -52,7 +52,7 @@ class App extends React.Component {
 
     return (
       <div>
-        <Nav searchFunc={this.debouncedSearchVideo.bind(this)}/>
+        <Nav searchFunc={_.debounce((event)=>this.searchVideo(event), 500)}/>
         <div className="col-md-7">
           <VideoPlayer video={this.state.firstVideo}/>
         </div>

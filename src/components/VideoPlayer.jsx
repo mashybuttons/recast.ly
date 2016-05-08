@@ -7,6 +7,9 @@ var VideoPlayer = (props) => (
       <h3>{props.video.snippet.title}</h3>
       <div>{props.video.snippet.description}</div>
     </div>
+    <div className="col-md-12">
+      <VideoDetails video={props.video}/>
+    </div>
   </div>
 );
 
